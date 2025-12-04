@@ -51,11 +51,11 @@ jobs:
       - name: Get the changelog
         run: echo "${{ steps.changelog.outputs.changelog }}"
         
-      - name: lowercase REPO
-        id: lowercase
+      - name: get first tag
+        id: tag
         run: |
-          string="${{github.repository}}""
-          echo "string=${string,,}" >> $GITHUB_OUTPUT
+          tags="${{ steps.meta.outputs.tags }}"
+          echo "tag=$(echo "$tags" | head -n 1)" >> $GITHUB_OUTPUT
 
       - name: Create Release
         uses: ncipollo/release-action@v1
@@ -67,7 +67,7 @@ jobs:
             # v${{ steps.meta.outputs.version }}
 
             ```sh
-            docker pull ghcr.io/${{ steps.lowercase.outputs.string }}:${{ steps.meta.outputs.version }}
+            docker pull ${{ steps.tag.outputs.tag }}
             ```
 
             ## Changelog
