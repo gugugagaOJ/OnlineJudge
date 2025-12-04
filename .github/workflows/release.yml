@@ -50,7 +50,13 @@ jobs:
       
       - name: Get the changelog
         run: echo "${{ steps.changelog.outputs.changelog }}"
-      
+        
+      - name: lowercase REPO
+        id: lowercase
+        run: |
+          string="${{github.repository}}""
+          echo "string=${string,,}" >> $GITHUB_OUTPUT
+
       - name: Create Release
         uses: ncipollo/release-action@v1
         with:
@@ -61,7 +67,7 @@ jobs:
             # v${{ steps.meta.outputs.version }}
 
             ```sh
-            docker pull ghcr.io/${{ github.repository }}:${{ steps.meta.outputs.version }}
+            docker pull ghcr.io/${{ steps.lowercase.outputs.string }}:${{ steps.meta.outputs.version }}
             ```
 
             ## Changelog
