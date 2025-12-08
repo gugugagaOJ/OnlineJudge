@@ -17,6 +17,10 @@ ARG TARGETVARIANT
 ENV OJ_ENV production
 WORKDIR /app
 
+RUN set -x \
+    && addgroup -g 101 -S nginx \
+    && adduser -S -D -H -u 101 -h /var/cache/nginx -s /sbin/nologin -G nginx -g nginx nginx
+
 COPY ./deploy/requirements.txt /app/deploy/
 # psycopg2: libpq-dev
 # pillow: libjpeg-turbo-dev zlib-dev freetype-dev
