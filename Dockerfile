@@ -18,15 +18,16 @@ ENV OJ_ENV production
 WORKDIR /app
 
 COPY ./deploy/requirements.txt /app/deploy/
-# psycopg2: libpg-dev
+# psycopg2: libpq-dev
 # pillow: libjpeg-turbo-dev zlib-dev freetype-dev
 RUN --mount=type=cache,target=/etc/apk/cache,id=apk-cahce-$TARGETARCH$TARGETVARIANT-final \
     --mount=type=cache,target=/root/.cache/pip,id=pip-cahce-$TARGETARCH$TARGETVARIANT-final \
     <<EOS
 set -ex
-apk add gcc libc-dev python3-dev libpq libpq-dev libjpeg-turbo libjpeg-turbo-dev zlib zlib-dev freetype freetype-dev supervisor openssl nginx curl unzip
-pip install -r /app/deploy/requirements.txt
-apk del gcc libc-dev python3-dev libpq-dev libjpeg-turbo-dev zlib-dev freetype-dev
+apk update
+apk add --no-cache gcc libc-dev musl-dev python3-dev libpq libpq-dev libjpeg-turbo libjpeg-turbo-dev zlib zlib-dev freetype freetype-dev supervisor openssl nginx curl unzip libffi-dev make
+pip install --no-cache-dir --no-build-isolation -r /app/deploy/requirements.txt
+apk del gcc libc-dev musl-dev python3-dev libpq-dev libjpeg-turbo-dev zlib-dev freetype-dev libffi-dev make
 EOS
 
 COPY ./ /app/
