@@ -10,7 +10,7 @@ unzip dist.zip
 rm -f dist.zip
 EOS
 
-FROM python:3.12-alpine
+FROM python:3.12-alpine3.20
 ARG TARGETARCH
 ARG TARGETVARIANT
 
